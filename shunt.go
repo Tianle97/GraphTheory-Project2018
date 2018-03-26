@@ -8,6 +8,34 @@ func inpost(infix string) string {
 	postfix := []rune{}
 	s := []rune{}
 
+	for _,r := range infix{
+		switch {
+		case r == '(' :
+			s = append(s,r)
+
+		case r == ')' :
+			for s[len(s)-1] != '(' {
+				postfix = append(postfix , s[len(s)-1])
+				s = s[:len(s)-1]
+			}
+			s = s[:len(s)-1]
+
+		case specials[r] > 0:
+			for len(s) > 0 && specials[r] <= specials[s[len(s)-1]] {
+				postfix = append(postfix , s[len(s)-1])
+				s = s[:len(s)-1]
+			}
+			s = append(s,r)
+
+		default:
+			postfix = append(postfix,r)
+		}
+	}
+
+	for len(s) > 0 {
+		postfix = append(postfix , s[len(s)-1])
+		s = s[:len(s)-1]
+	}
 
 	return string(postfix)
 }
