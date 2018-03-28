@@ -1,3 +1,6 @@
+//Author: Tianle Shu
+//GMIT Software Development Student
+
 package main
 
 import "fmt"
@@ -69,7 +72,7 @@ func inpost(infix string) string {
 	return string(postfix)
 }
 
-//Main function appeared result.
+//Main function output result.
 func main() {
 	//Answer ab.c*
 	fmt.Println("Infix:  ","a.b.c*")
