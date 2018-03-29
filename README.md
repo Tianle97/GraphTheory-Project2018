@@ -1,8 +1,8 @@
 # GraphTheory-Project2018
 3rd year Graph Theory Project-2018
-### Lecturer: *Ian McLoughlin*
-### Student Name: *Tianle Shu*
-### Student ID: *G00353418*
+#### Lecturer: *Ian McLoughlin*
+#### Student Name: *Tianle Shu*
+#### Student ID: *G00353418*
 ![Golang](https://scriptcrunch.com/wp-content/uploads/2017/12/golang.jpg)
 
 ## *Introduction*
@@ -24,6 +24,5 @@ Regular expressions and nondeterministic finite automata are two representations
 ## *Reference*
 [Golang beginner](https://tour.go-zh.org/welcome/1)  <br/>
 Better to understand NFA: https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton <br/>
-
 Better to understand  Shunting Yard Algorithm: https://en.wikipedia.org/wiki/Shunting-yard_algorithm <br/>
 Explain rune in Golang(Chinese Language): https://golangtc.com/t/528cc004320b52227200000f <br/>
