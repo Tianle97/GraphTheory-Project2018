@@ -3,7 +3,12 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+	shunt "./shuntingPackage"
+	"bufio"
+	"os"
+)
 
 // state struct
 //it has 2 edges in which are pointers to others 
@@ -33,6 +38,9 @@ func poregtonfa(pofix string) *nfa{
 	// through the regular expression one rune at a time
 	for _,r := range pofix {
 		switch r {
+
+		//Catenation:
+		// `.` means : first followed by next. (e.g. r.s – the concatenation of the languages defined by regular expressions r and s.)
 		case '.':
 			//pop off 2 frags
 			frag2 := nfastack[len(nfastack)-1]
@@ -46,6 +54,8 @@ func poregtonfa(pofix string) *nfa{
 			//appending a new concatenate frag to stack
 			nfastack = append(nfastack,&nfa{initial: frag1.initial, accept:frag2.accept})
 
+		// Alternation:
+		// `|` means: or. ( a|b = an 'a' or a 'b'.)
 		case '|':
 			//pop off 2 frags
 			frag2 := nfastack[len(nfastack)-1]
@@ -63,6 +73,8 @@ func poregtonfa(pofix string) *nfa{
 			//appending a new concatenate frag to stack
 			nfastack =append(nfastack,&nfa{initial: &initial, accept: &accept})
 
+		// Zero or more:
+		// `*` means:  zero or more times.(a∗ = zero or more a’s.)
 		case '*':
 			//pop off 1 frag
 			frag := nfastack[len(nfastack)-1]
@@ -80,6 +92,32 @@ func poregtonfa(pofix string) *nfa{
 			//appending a new concatenate frag to stack
 			nfastack = append(nfastack,&nfa{initial: &initial, accept: &accept})
 		
+		//One or more:
+		case '+':
+			//pop off 1 frag
+			frag := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+			//create a new state called accept
+			accept := state{}
+			//creating new state called initial,setting one edge to frag and a accept state
+			initial := state{edge1: frag.initial, edge2: &accept}
+			//setting a frag accept state arrow back to initial of frag
+			frag.accept.edge1 = &initial
+			//appending a new concatenate frag to stack
+			nfastack = append(nfastack, &nfa{initial: frag.initial, accept: &accept})
+		
+		//Zero or one:
+		case '?':
+			//pop off 1 frag
+			frag := nfastack[len(nfastack)-1]
+			//creating new state called initial,setting one edge to frag and a accept state
+			initial := state{edge1: frag.initial, edge2: frag.accept}
+			//setting a frag accept state arrow back to initial of frag
+			frag.accept.edge1 = &initial
+			//appending a new concatenate frag to stack
+			nfastack = append(nfastack, &nfa{initial: &initial, accept: frag.accept})
+			
+		//Literal characters:
 		default:
 			//create a new state called accept
 			accept := state{}
@@ -160,8 +198,42 @@ func pomatch(po string, s string) bool {
 
 // Main function for output result
 func main() {
-	nfa := poregtonfa("ab.c*|")
+	a := 0
+	var b string
+	var c string
+	fmt.Println("Please input choose:\n 1.Check Shunting yard algorithm, type '1'.\n 2.Check Postfix regular expression, type '2'.\n 3.if you want to exit just type '3'. ")
+	fmt.Scanln(&a)
+
+	//if user type '1' , it will check shunting yard algorithm
+	//if user type '2' , it will check nfa algorithm
+	//if user type '3' , it will exit the program
+	if a == 1 {
+		fmt.Println("please enter a Infix expression: ")
+		r := bufio.NewReader(os.Stdin)
+		expression, _ := r.ReadString('\n') 
+		expression  =  shunt.Infix(expression)
+		fmt.Println("Infix: ", expression)
+		fmt.Println("Postfix: ", shunt.Inpost(expression))
+	} else if a == 2 {
+		fmt.Println("Please enter a regular string : ")
+		fmt.Scanln(&b)
+		fmt.Println("Please enter a match the string: ")
+		fmt.Scanln(&c)
+		//nfa := poregtonfa(b)
+		pomatch := pomatch(b,c)
+		//fmt.Println(pomatch)
+		if pomatch == true {
+		fmt.Println("match seccessful.")
+	}else {
+		fmt.Println("match failure.")
+	}
+	} else if a == 3 {
+		fmt.Println("you exit this program~\n")
+	} else {
+		fmt.Println("Please enter a correct String~")
+	}
+	/*nfa := poregtonfa("ab.c*|")
 	pomatch := pomatch("ab.c*|","abc")
 	fmt.Println(pomatch)
-	fmt.Println(nfa)
+	fmt.Println(nfa)*/
 }

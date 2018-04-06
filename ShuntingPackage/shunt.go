@@ -1,13 +1,13 @@
 //Author: Tianle Shu
 //GMIT Software Development Student
 
-package main
+package shuntingPackage
 
-import "fmt"
+//import "fmt"
 
 //Inpost function to convert infix regular expression to postfix 
 //(e.g. infix regex "a.b.c*" become to postfix trgrx "ab.c*." )
-func inpost(infix string) string {
+func Inpost(infix string) string {
 
 	//create a map for procefence( * => . => | )
 	specials := map[rune]int{'*':10,'.':9,'|':8}
@@ -72,8 +72,14 @@ func inpost(infix string) string {
 	return string(postfix)
 }
 
+func Infix (s string) string {
+	if len(s) > 0 {
+		s = s[:len(s)-2]
+	}
+	return s
+}
 //Main function output result.
-func main() {
+/*func main() {
 	//Answer ab.c*
 	fmt.Println("Infix:  ","a.b.c*")
 	fmt.Println("Postfix: ",inpost("a.b.c*")) 
@@ -89,4 +95,4 @@ func main() {
 	//Answer  abb.+.c.
 	fmt.Println("Infix: ","a.(b.b)+.c")
 	fmt.Println("Postfix: ",inpost("a.(b.b)+.c"))
-}
+}*/

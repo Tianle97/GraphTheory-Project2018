@@ -26,7 +26,7 @@ type nfa struct {
 //poregtonfa function
 // that means change the postfix regular expression to an NFA(Non-finite automaton)
 // And return a pointer to an NFA struct
-func poregtonfa(pofix string) {
+func poregtonfa(pofix string) *nfa{
 	//create a empty array of pointer nfa stack to nfa struct
 	nfastack := []*nfa{}
 	
@@ -79,7 +79,7 @@ func poregtonfa(pofix string) {
 
 			//appending a new concatenate frag to stack
 			nfastack = append(nfastack,&nfa{initial: &initial, accept: &accept})
-		
+
 		default:
 			//create a new state called accept
 			accept := state{}
