@@ -20,9 +20,107 @@ The shunting yard algorithm is not your basic algorithm like mergesort, string s
 
 Thompson's construction is an algorithm for transforming a regular expression into an equivalent nondeterministic finite automaton (NFA). This NFA can be used to match strings against the regular expression. <br/>
 Regular expressions and nondeterministic finite automata are two representations of formal languages. For instance, text processing utilities use regular expressions to describe advanced search patterns, but NFAs are better suited for execution on a computer. Hence, this algorithm is of practical interest, since it can compile regular expressions into NFAs. From a theoretical point of view, this algorithm is a part of the proof that they both accept exactly the same languages, that is, the regular languages.
+#### Code Explain <br/>
+` "." `: <br/>
+Catenation:
+```Golang
+case '.':
+			//pop off 2 frags
+			frag2 := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+			frag1 := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+
+			// set  frag1 accept = frag2 initial State
+			frag1.accept.edge1 = frag2.initial
+			
+			//appending a new concatenate frag to stack
+			nfastack = append(nfastack,&nfa{initial: frag1.initial, accept:frag2.accept})
+```
 <br/>
+
+` "*" `:  <br/>
+Zero or More:
+``` Golang
+case '*':
+			//pop off 1 frag
+			frag := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+
+			//create a new state called accept
+			accept := state{}
+			//creating new state called initial,setting one edge to frag and a accept state
+			initial := state{edge1: frag.initial, edge2: &accept}
+			//setting 2 frag accept state arrows back to initial of frag
+			//and to the new accept state
+			frag.accept.edge1 = frag.initial
+			frag.accept.edge2 = &accept
+
+			//appending a new concatenate frag to stack
+			nfastack = append(nfastack,&nfa{initial: &initial, accept: &accept})
+```
+<br/>
+
+` "|" `: <br/>
+Alternation:
+```Golang
+case '|':
+			//pop off 2 frags
+			frag2 := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+			frag1 := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+
+			//creating new state called initial , both edges pinter to initial state
+			initial := state{edge1: frag1.initial, edge2: frag2.initial}
+			//creating new empty accept state
+			accept := state{}
+			//using accept states of frag1 and frag2 to new accept state
+			frag1.accept.edge1 = &accept
+			frag2.accept.edge1 = &accept
+			//appending a new concatenate frag to stack
+			nfastack =append(nfastack,&nfa{initial: &initial, accept: &accept})
+```
+<br/>
+
+` "+" `: <br/>
+One or More:
+```Golang
+//One or more:
+		case '+':
+			//pop off 1 frag
+			frag := nfastack[len(nfastack)-1]
+			nfastack = nfastack[:len(nfastack)-1]
+			//create a new state called accept
+			accept := state{}
+			//creating new state called initial,setting one edge to frag and a accept state
+			initial := state{edge1: frag.initial, edge2: &accept}
+			//setting a frag accept state arrow back to initial of frag
+			frag.accept.edge1 = &initial
+			//appending a new concatenate frag to stack
+			nfastack = append(nfastack, &nfa{initial: frag.initial, accept: &accept})
+```
+<br/>
+
+` "?" `: <br/>
+Zero or More:
+```Golang
+//One or more:
+		case '?':
+			//pop off 1 frag
+			frag := nfastack[len(nfastack)-1]
+			//creating new state called initial,setting one edge to frag and a accept state
+			initial := state{edge1: frag.initial, edge2: frag.accept}
+			//setting a frag accept state arrow back to initial of frag
+			frag.accept.edge1 = &initial
+			//appending a new concatenate frag to stack
+			nfastack = append(nfastack, &nfa{initial: &initial, accept: frag.accept})
+```
+
 ## *Reference*
 [Golang beginner](https://tour.go-zh.org/welcome/1)  <br/>
 Better to understand NFA: https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton <br/>
-Better to understand  Shunting Yard Algorithm: https://en.wikipedia.org/wiki/Shunting-yard_algorithm <br/>
+Better to understand Shunting Yard Algorithm: https://en.wikipedia.org/wiki/Shunting-yard_algorithm <br/>
+Better to understand the some regexp code and the explain: https://swtch.com/~rsc/regexp/regexp1.html <br/>
 Explain rune in Golang(Chinese Language): https://golangtc.com/t/528cc004320b52227200000f <br/>
+Regex Tester:http://rextester.com/tester <br/>
