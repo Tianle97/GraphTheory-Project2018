@@ -192,16 +192,15 @@ func pomatch(po string, s string) bool {
 			break
 		}
 	}
-
 	return ismatch
 }
 
-// Main function for output result
+// Main function for check the algorithm and output the result
 func main() {
 	a := 0
 	var b string
 	var c string
-	fmt.Println("Please input choose:\n 1.Check Shunting yard algorithm, type '1'.\n 2.Check Postfix regular expression, type '2'.\n 3.if you want to exit just type '3'. ")
+	fmt.Println("Please input choose the number:\n 1.Check Shunting yard algorithm, type '1'.\n 2.Check Postfix regular expression, type '2'.\n 3.if you want to exit just type '3'. ")
 	fmt.Scanln(&a)
 
 	//if user type '1' , it will check shunting yard algorithm
@@ -209,6 +208,8 @@ func main() {
 	//if user type '3' , it will exit the program
 	if a == 1 {
 		fmt.Println("please enter a Infix expression: ")
+		//create a new pointer to bufio.Reader.
+		//This line of code will create a reader and bind it with standard input.
 		r := bufio.NewReader(os.Stdin)
 		expression, _ := r.ReadString('\n') 
 		expression  =  shunt.Infix(expression)
