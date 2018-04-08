@@ -117,6 +117,18 @@ Zero or More:
 			nfastack = append(nfastack, &nfa{initial: &initial, accept: frag.accept})
 ```
 
+
+## *How to Run*
+ * 1 Git clone or download this repository
+ * 2 Open cmder and go to this project path
+ * 3 Type this code in cmder: <br/>
+      `go run rega.go`
+ * 4 Than you will see this code and just choose what you want to check algorithm: <br/>
+ `Please input choose the number:` <br/>
+ `1.Check Shunting yard algorithm, type '1'.` <br/>
+ `2.Check Postfix regular expression, type '2'.` <br/>
+ `3.if you want to exit just type '3'.` <br/>
+
 ## *Reference*
 [Golang beginner](https://tour.go-zh.org/welcome/1)  <br/>
 Better to understand NFA: https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton <br/>
